@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 72" width="96" height="72" role="img" aria-label="TwinChat">
+  <path d="M14 10 h68 a12 12 0 0 1 12 12 v20 a12 12 0 0 1 -12 12 h-40 l-16 14 v-14 h-12 a12 12 0 0 1 -12 -12 v-20 a12 12 0 0 1 12 -12 z" fill="#378ADD"/>
+  <path d="M48 10 h34 a12 12 0 0 1 12 12 v20 a12 12 0 0 1 -12 12 h-34 z" fill="#5DCAA5"/>
+  <circle cx="35" cy="32" r="6" fill="#ffffff"/>
+  <circle cx="61" cy="32" r="6" fill="#ffffff"/>
+</svg>
