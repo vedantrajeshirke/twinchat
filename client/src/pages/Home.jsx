@@ -1,46 +1,33 @@
-import { useAuth } from '../context/AuthContext.jsx';
-import { useTheme } from '../context/ThemeContext.jsx';
-import { Wordmark } from '../components/Logo.jsx';
-import { Button } from '../components/ui/Button.jsx';
-import { Avatar } from '../components/ui/Avatar.jsx';
-import { Chip } from '../components/ui/Chip.jsx';
+import { useMemo } from 'react';
+import { useParams } from 'react-router-dom';
+import { useChat } from '../context/ChatContext.jsx';
+import { ConversationList } from '../components/chat/ConversationList.jsx';
+import { ChatWindow } from '../components/chat/ChatWindow.jsx';
+import { cn } from '../utils/cn.js';
 
-// Placeholder while the messaging screens are built.
+/**
+ * Three-region shell (§5.4). The rail lives in AppShell; this page owns the
+ * conversation list and the chat window. On narrow screens only one of the two
+ * is shown: the list, or the open thread.
+ */
 export default function Home() {
-  const { user, logout } = useAuth();
-  const { mode, toggleMode } = useTheme();
+  const { conversationId } = useParams();
+  const { conversations } = useChat();
+
+  const active = useMemo(
+    () => conversations.find((c) => c._id === conversationId) ?? null,
+    [conversations, conversationId]
+  );
 
   return (
-    <div className="min-h-dvh bg-canvas">
-      <header className="flex items-center justify-between border-b border-line bg-surface px-6 py-4">
-        <Wordmark size={24} />
-        <div className="flex items-center gap-3">
-          <Button variant="secondary" size="sm" onClick={toggleMode}>
-            {mode === 'light' ? 'Dark' : 'Light'} mode
-          </Button>
-          <Button variant="ghost" size="sm" onClick={logout}>
-            Log out
-          </Button>
-        </div>
-      </header>
+    <div className="flex h-full min-h-0">
+      <div className={cn('min-h-0 w-full md:w-auto', 'md:flex')}>
+        <ConversationList />
+      </div>
 
-      <main className="mx-auto max-w-2xl p-6">
-        <div className="tc-card flex items-center gap-4 p-6">
-          <Avatar src={user?.profilePicture} name={`${user?.firstName} ${user?.lastName}`} size="lg" online />
-          <div className="min-w-0">
-            <h1 className="text-lg">
-              {user?.firstName} {user?.lastName}
-            </h1>
-            <p className="text-sm text-muted">@{user?.username}</p>
-          </div>
-        </div>
-
-        <div className="mt-4 flex flex-wrap gap-2">
-          {user?.interests?.map((i) => (
-            <Chip key={i}>{i}</Chip>
-          ))}
-        </div>
-      </main>
+      <div className={cn('min-h-0 min-w-0 flex-1', !conversationId && 'hidden md:flex')}>
+        <ChatWindow conversation={active} />
+      </div>
     </div>
   );
 }
