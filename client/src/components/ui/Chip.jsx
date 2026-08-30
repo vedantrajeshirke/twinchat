@@ -1,20 +1,32 @@
 import { cn } from '../../utils/cn.js';
 
-/** Interest pill. `selected` drives the multi-select state in signup/filters. */
-export function Chip({ children, selected = false, onClick, className = '', ...props }) {
+/**
+ * Interest pill. `tone` picks the colour scheme explicitly rather than letting
+ * callers pass competing colour classes. Tailwind resolves conflicting
+ * utilities by stylesheet order, not by prop order, so overriding via
+ * className is unreliable.
+ */
+const TONES = {
+  default: 'bg-surface-2 text-body border-line',
+  selected: 'bg-primary text-on-primary border-primary',
+  shared: 'bg-accent/12 text-accent border-accent/40',
+  primary: 'bg-primary/10 text-primary border-primary/30',
+};
+
+export function Chip({ children, selected = false, tone, onClick, className = '', ...props }) {
   const Tag = onClick ? 'button' : 'span';
+  const resolved = selected ? 'selected' : (tone ?? 'default');
+
   return (
     <Tag
       type={onClick ? 'button' : undefined}
       onClick={onClick}
       aria-pressed={onClick ? selected : undefined}
       className={cn(
-        'inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[13px] transition-colors',
-        selected
-          ? 'bg-primary text-on-primary border border-primary'
-          : 'bg-surface-2 text-body border border-line',
-        onClick && !selected && 'hover:border-primary hover:text-primary',
+        'inline-flex items-center gap-1 rounded-full border px-3 py-1.5 text-[13px] transition-colors',
+        TONES[resolved],
         onClick && 'cursor-pointer',
+        onClick && resolved === 'default' && 'hover:border-primary hover:text-primary',
         className
       )}
       {...props}
@@ -30,8 +42,7 @@ export function SharedBadge({ count, className = '' }) {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium',
-        'bg-accent/12 text-accent',
+        'inline-flex items-center gap-1 rounded-full bg-accent/12 px-2 py-0.5 text-[11px] font-medium text-accent',
         className
       )}
     >

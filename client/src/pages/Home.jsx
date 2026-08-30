@@ -21,11 +21,11 @@ export default function Home() {
 
   return (
     <div className="flex h-full min-h-0">
-      <div className={cn('min-h-0 w-full md:w-auto', 'md:flex')}>
+      <div className={cn('min-h-0 w-full md:w-auto', conversationId ? 'hidden md:flex' : 'flex')}>
         <ConversationList />
       </div>
 
-      <div className={cn('min-h-0 min-w-0 flex-1', !conversationId && 'hidden md:flex')}>
+      <div className={cn('min-h-0 min-w-0 flex-1', conversationId ? 'flex' : 'hidden md:flex')}>
         <ChatWindow conversation={active} />
       </div>
     </div>
