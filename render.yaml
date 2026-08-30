@@ -1,0 +1,27 @@
+# Render blueprint for the TwinChat API.
+# The frontend goes to Vercel or Netlify — a serverless host cannot hold the
+# persistent WebSocket connection Socket.IO needs.
+services:
+  - type: web
+    name: twinchat-api
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false          # MongoDB Atlas connection string
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CLIENT_URL
+        sync: false          # your deployed frontend origin
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
