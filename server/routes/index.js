@@ -4,6 +4,7 @@ import { authRoutes } from './auth.routes.js';
 import { userRoutes } from './user.routes.js';
 import { connectionRoutes } from './connection.routes.js';
 import { groupRoutes } from './group.routes.js';
+import { conversationRoutes } from './conversation.routes.js';
 
 export const apiRouter = Router();
 
@@ -12,3 +13,4 @@ apiRouter.use('/auth', authRoutes);
 apiRouter.use('/users', userRoutes);
 apiRouter.use('/requests', connectionRoutes);
 apiRouter.use('/groups', groupRoutes);
+apiRouter.use('/conversations', conversationRoutes);
