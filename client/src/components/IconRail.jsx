@@ -1,7 +1,8 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { MessagesSquare, Search, Bell, User, Settings, LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useChat } from '../context/ChatContext.jsx';
+import { useLogoutConfirm } from '../hooks/useLogoutConfirm.jsx';
 import { LogoMark } from './Logo.jsx';
 import { Avatar } from './ui/Avatar.jsx';
 import { cn } from '../utils/cn.js';
@@ -47,9 +48,9 @@ function RailButton({ to, icon: Icon, label, badge, onClick, children }) {
 
 /** Narrow left rail, the app's primary navigation (PROJECT_PLAN §5.4A). */
 export function IconRail() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const { requestCount, totalUnread } = useChat();
-  const navigate = useNavigate();
+  const { requestLogout, logoutDialog } = useLogoutConfirm();
 
   return (
     <nav
@@ -74,14 +75,9 @@ export function IconRail() {
       <div className="flex-1" />
 
       <RailButton to="/settings" icon={Settings} label="Settings" />
-      <RailButton
-        icon={LogOut}
-        label="Log out"
-        onClick={() => {
-          logout();
-          navigate('/', { replace: true });
-        }}
-      />
+      <RailButton icon={LogOut} label="Log out" onClick={requestLogout} />
+
+      {logoutDialog}
     </nav>
   );
 }

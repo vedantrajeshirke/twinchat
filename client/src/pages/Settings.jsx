@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Check, LogOut, Moon, Palette, Shield, Sun, KeyRound } from 'lucide-react';
 import { api, errorMessage } from '../services/api.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useTheme } from '../context/ThemeContext.jsx';
+import { useLogoutConfirm } from '../hooks/useLogoutConfirm.jsx';
 import { THEMES } from '../utils/themes.js';
 import { PageHeader, PageBody } from '../components/PageHeader.jsx';
 import { Button } from '../components/ui/Button.jsx';
@@ -28,9 +28,9 @@ function Section({ icon: Icon, title, description, children }) {
 }
 
 export default function Settings() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const { theme, mode, setTheme, setMode } = useTheme();
-  const navigate = useNavigate();
+  const { requestLogout, logoutDialog } = useLogoutConfirm();
 
   return (
     <div className="flex h-full flex-col">
@@ -128,17 +128,13 @@ export default function Settings() {
         </Section>
 
         <Section icon={LogOut} title="Log out" description="End this session on this device.">
-          <Button
-            variant="danger"
-            onClick={() => {
-              logout();
-              navigate('/', { replace: true });
-            }}
-          >
+          <Button variant="danger" onClick={requestLogout}>
             <LogOut size={15} /> Log out
           </Button>
         </Section>
       </PageBody>
+
+      {logoutDialog}
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { Camera, LogOut, Mail, Pencil, UserMinus, Users, UserPlus, X, Check } fr
 import { api, errorMessage } from '../services/api.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useSocket } from '../context/SocketContext.jsx';
+import { useLogoutConfirm } from '../hooks/useLogoutConfirm.jsx';
 import { PageHeader, PageBody } from '../components/PageHeader.jsx';
 import { InterestPicker } from '../components/InterestPicker.jsx';
 import { Avatar } from '../components/ui/Avatar.jsx';
@@ -17,7 +18,8 @@ import { MAX_UPLOAD_BYTES, formatBytes } from '../utils/files.js';
 
 /** The account owner's own profile (§5.7). Email is visible here only. */
 export default function Profile() {
-  const { user, patchUser, logout } = useAuth();
+  const { user, patchUser } = useAuth();
+  const { requestLogout, logoutDialog } = useLogoutConfirm();
   const { isOnline } = useSocket();
   const navigate = useNavigate();
 
@@ -80,14 +82,7 @@ export default function Profile() {
             <Button size="sm" variant="secondary" onClick={() => setEditing(true)}>
               <Pencil size={14} /> Edit
             </Button>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => {
-                logout();
-                navigate('/', { replace: true });
-              }}
-            >
+            <Button size="sm" variant="ghost" onClick={requestLogout}>
               <LogOut size={14} /> Log out
             </Button>
           </div>
@@ -194,6 +189,8 @@ export default function Profile() {
           )}
         </section>
       </PageBody>
+
+      {logoutDialog}
 
       {editing && <EditProfileDialog onClose={() => setEditing(false)} />}
 
