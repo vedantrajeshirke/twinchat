@@ -1,5 +1,5 @@
 # Render blueprint for the TwinChat API.
-# The frontend goes to Vercel or Netlify — a serverless host cannot hold the
+# The frontend goes to Vercel or Netlify. A serverless host cannot hold the
 # persistent WebSocket connection Socket.IO needs.
 services:
   - type: web
