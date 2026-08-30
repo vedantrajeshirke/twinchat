@@ -1,6 +1,7 @@
 /**
  * A small, believable community so the UI can be exercised without
- * hand-creating accounts. Development only, it wipes the database first.
+ * hand-creating accounts. Development only. Any previous demo community is
+ * cleared first; real accounts are left alone.
  *
  *   npm run seed:demo        against a real MONGO_URI
  *   npm run dev:demo         against the zero-config in-memory database
@@ -9,6 +10,7 @@
  * Log in as any of them: "ada" is the richest account to explore.
  */
 import { seedInterests } from './seedInterests.js';
+import { removeDemo } from './removeDemo.js';
 import { User } from '../models/User.js';
 import { Group } from '../models/Group.js';
 import { ConnectionRequest } from '../models/ConnectionRequest.js';
@@ -90,18 +92,11 @@ const GROUP_CHATS = [
 const byUsername = new Map();
 const find = (u) => byUsername.get(u);
 
-async function reset() {
-  await Promise.all([
-    User.deleteMany({}), Group.deleteMany({}), ConnectionRequest.deleteMany({}),
-    Conversation.deleteMany({}), Message.deleteMany({}),
-  ]);
-}
-
 /** Wipes the database and reseeds the demo community. Development only. */
 export async function seedDemo() {
   byUsername.clear();
   await seedInterests({ quiet: true });
-  await reset();
+  await removeDemo();
 
   for (const person of PEOPLE) {
     const user = await User.create({

@@ -20,14 +20,14 @@ if (!env.mongoUri) {
 
 if (process.env.SEED_DEMO !== 'wipe-remote') {
   console.error(
-    '\n✖ This DELETES every document in the database at MONGO_URI.\n' +
+    '\n✖ This writes demo accounts into the database at MONGO_URI.\n' +
       '  Re-run as:  npm run seed:demo:remote\n'
   );
   process.exit(1);
 }
 
 await connectDB();
-console.log(`⚠  Wiping and reseeding ${new URL(env.mongoUri.replace('mongodb+srv', 'https')).host}`);
+console.log(`⚠  Seeding demo accounts into ${new URL(env.mongoUri.replace('mongodb+srv', 'https')).host}`);
 await seedDemo();
 await disconnectDB();
 await mongoose.connection.close();

@@ -22,7 +22,7 @@ async function start() {
     // back to in-memory, and seeding that is still safe.
     if (!usingMemoryDB() && process.env.SEED_DEMO !== 'wipe-remote') {
       throw new Error(
-        'SEED_DEMO would DELETE every document in the database at MONGO_URI.\n' +
+        'SEED_DEMO writes demo accounts into the database at MONGO_URI.\n' +
           '  If that is what you want, run:  npm run seed:demo:remote\n' +
           '  To seed the throwaway in-memory database instead, clear MONGO_URI first.'
       );
